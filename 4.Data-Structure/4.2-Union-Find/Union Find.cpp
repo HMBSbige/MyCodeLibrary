@@ -1,36 +1,42 @@
 /*
-²¢²é¼¯
-½á¹¹Ìå£ºDisjoinSet
-³ÉÔ±±äÁ¿£º
-    vector<int> father //ÔªËØµÄ¸¸Ç×½Úµã£¬Ê÷¸ùÔªËØµÄ¸¸Ç×Îª×ÔÉí
-    vector<int> rank   //Ê÷¸ùÔªËØËù´ú±í¼¯ºÏµÄrank
-³ÉÔ±º¯Êı£º
-    DisjoinSet(int n);       //³õÊ¼»¯£¬n¸öÔªËØ£¬´¦ÓÚµ¥¶À¼¯ºÏ
-    ¸´ÔÓ¶È£ºO(n)
-    int find(int v);         //²éÕÒvËùÔÚ¼¯ºÏµÄ´ú±íÔª
-    ¸´ÔÓ¶È£º¾ùÌ¯O(1)
-    void merge(int x,int y); //ºÏ²¢xËùÔÚµÄ¼¯ºÏÓëyËùÔÚ¼¯ºÏ
-    ¸´ÔÓ¶È£º¾ùÌ¯O(1)
+å¹¶æŸ¥é›†
+ç»“æ„ä½“ï¼šDisjoinSet
+æˆå‘˜å˜é‡ï¼š
+    vector<int> father //å…ƒç´ çš„çˆ¶äº²èŠ‚ç‚¹ï¼Œæ ‘æ ¹å…ƒç´ çš„çˆ¶äº²ä¸ºè‡ªèº«
+    vector<int> rank   //æ ‘æ ¹å…ƒç´ æ‰€ä»£è¡¨é›†åˆçš„rank
+    _max               //æœ€å¤§é›†åˆçš„å…ƒç´ ä¸ªæ•°
+æˆå‘˜å‡½æ•°ï¼š
+    DisjoinSet(int n);       //åˆå§‹åŒ–ï¼Œnä¸ªå…ƒç´ ï¼Œå¤„äºå•ç‹¬é›†åˆ
+    å¤æ‚åº¦ï¼šO(n)
+    int find(int v);         //æŸ¥æ‰¾væ‰€åœ¨é›†åˆçš„ä»£è¡¨å…ƒ
+    å¤æ‚åº¦ï¼šå‡æ‘ŠO(1)
+    void merge(int x,int y); //åˆå¹¶xæ‰€åœ¨çš„é›†åˆä¸yæ‰€åœ¨é›†åˆ
+    å¤æ‚åº¦ï¼šå‡æ‘ŠO(1)
 */
-struct DisjoinSet{
-    std::vector<int> father,rank;
+struct DisjoinSet {
+	std::vector<int> father, rank,max;
+	int _max = 1;
 
-    DisjoinSet(int n):father(n),rank(n){
-        for(int i=0;i<n;++i)
-            father[i]=i;
-    }
-    int find(int v){
-        return father[v]=father[v]==v?v:find(father[v]);
-    }
-
-    void merge(int x,int y){
-        int a=find(x),b=find(y);
-        if(rank[a]<rank[b])
-            father[a]=b;
-        else{
-            father[b]=a;
-            if(rank[b]==rank[a])
-                ++rank[a];
-        }
-    }
+	DisjoinSet(int n) :father(n), rank(n),max(n,1){
+		for (int i = 0; i<n; ++i)
+			father[i] = i;
+	}
+	int find(int v) {
+		return father[v] = father[v] == v ? v : find(father[v]);
+	}
+	void merge(int x, int y) {
+		int a = find(x), b = find(y);
+		if (rank[a]<rank[b]){
+			father[a] = b;	
+			if (_max < (max[b] += max[a]))
+				_max = max[b];
+		}
+		else {
+				father[b] = a;
+				if (_max < (max[a] += max[b]))
+					_max = max[a];
+				if (rank[b] == rank[a])
+					++rank[a];					
+			 }
+	}
 };
