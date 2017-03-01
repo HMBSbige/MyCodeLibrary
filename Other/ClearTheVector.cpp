@@ -1,3 +1,3 @@
-template <class T> void vecClear(vector<T> vec){
-	vector<T>().swap(vec);
+template <class T> void vecClear(vector<T> *vec) {
+	vector<T>().swap(*vec);
 }
