@@ -7,9 +7,10 @@
 #include <ctime>
 #define ull unsigned long long//<=18446744073709551615
 using namespace std;
+set<ull> Prime;
 vector<bool> isPrime;
 vector<ull> Primes;
-void _MakePrime(ull N)//Ò»°ãÏßĞÔÉ¸·¨
+void _MakePrime(ull N)//ä¸€èˆ¬çº¿æ€§ç­›æ³•
 {
 	isPrime = vector<bool>(N+1,true);
 	vector<ull>().swap(Primes);
@@ -22,7 +23,7 @@ void _MakePrime(ull N)//Ò»°ãÏßĞÔÉ¸·¨
 				isPrime[k] = false;
 		}
 }
-void __MakePrime(ull N)//¿ìËÙÏßĞÔÉ¸·¨
+void __MakePrime(ull N)//å¿«é€Ÿçº¿æ€§ç­›æ³•
 {
 	++N;
 	isPrime = vector<bool>(N + 1, true);
@@ -42,24 +43,24 @@ void __MakePrime(ull N)//¿ìËÙÏßĞÔÉ¸·¨
 		}
 	}
 }
-void ___MakePrime(ull N)//Ä§¸Ä¿ìËÙÏßĞÔÉ¸·¨
+void ___MakePrime(ull N)//é­”æ”¹å¿«é€Ÿçº¿æ€§ç­›æ³•
 {
 	--N;
 	ull half = N / 2;
 	ull sn = (ull)sqrt(N);
-	vector<bool> p(half,1);// ³õÊ¼»¯È«²¿ÆæÊıÎªËØÊı¡£p[0]¶ÔÓ¦3£¬¼´p[i]¶ÔÓ¦2*i+3   
+	vector<bool> p(half,1);// åˆå§‹åŒ–å…¨éƒ¨å¥‡æ•°ä¸ºç´ æ•°ã€‚p[0]å¯¹åº”3ï¼Œå³p[i]å¯¹åº”2*i+3   
 	for (ull i = 0; i < sn; i++) {
-		if (p[i])//Èç¹û 2*i+3 ÊÇËØÊı  
+		if (p[i])//å¦‚æœ 2*i+3 æ˜¯ç´ æ•°  
 		{
 			for (ull k = i + i + 3, j = k*i + k + i; j < half; j += k)
-				// É¸·¨ÆğµãÊÇ p[i]Ëù¶ÔÓ¦ËØÊıµÄÆ½·½ k^2                                          
-				// k^2ÔÚ p ÖĞµÄÎ»ÖÃÊÇ k*i+k+i  
-				//    ÏÂ±ê i         k*i+k+i  
-				//¶ÔÓ¦ÊıÖµ k=i+i+3   k^2           
+				// ç­›æ³•èµ·ç‚¹æ˜¯ p[i]æ‰€å¯¹åº”ç´ æ•°çš„å¹³æ–¹ k^2                                          
+				// k^2åœ¨ p ä¸­çš„ä½ç½®æ˜¯ k*i+k+i  
+				//    ä¸‹æ ‡ i         k*i+k+i  
+				//å¯¹åº”æ•°å€¼ k=i+i+3   k^2           
 				p[j] = false;
 		}
 	}
-	//ËØÊı¶¼´æ·ÅÔÚ p Êı×éÖĞ£¬p[i]=true´ú±í i+i+3 ÊÇËØÊı¡£  
+	//ç´ æ•°éƒ½å­˜æ”¾åœ¨ p æ•°ç»„ä¸­ï¼Œp[i]=trueä»£è¡¨ i+i+3 æ˜¯ç´ æ•°ã€‚  
 	vector<ull>(1,2).swap(Primes);
 	isPrime = vector<bool>(N + 1, true);
 	for (ull i = 0;i<half;++i) {
@@ -68,25 +69,31 @@ void ___MakePrime(ull N)//Ä§¸Ä¿ìËÙÏßĞÔÉ¸·¨
 		}
 	}
 }
-void ____MakePrime(ull N)//Ä¤¸Ä¿ìËÙÏßĞÔÉ¸·¨
+void ____MakePrime(ull N)//è†œæ”¹å¿«é€Ÿçº¿æ€§ç­›æ³•
 {
+	ull m = N;
 	--N;
-	N/= 2;
-	ull sn = (ull)(sqrt(2*N)/2);
-	vector<bool> p(N, 1);  
+	N /= 2;
+	ull sn = (ull)(sqrt(2 * N) / 2);
+	vector<bool> p(N, 1);
 	for (ull i = 0; i < sn; i++) {
-		if (p[i]) 
+		if (p[i])
 		{
-			for (ull j=i*(2*i+6)+3;j<N;j+=2*i+3)          
+			for (ull j = i*(2 * i + 6) + 3; j<N; j += 2 * i + 3)
 				p[j] = false;
 		}
 	}
-
-	vector<ull>(1, 2).swap(Primes);
-	isPrime = vector<bool>(N + 1, true);
+	//
+	vector<ull>(1,2).swap(Primes);
+	set<ull>().swap(Prime);
+	isPrime = vector<bool>(m + 1, false);
+	Prime.insert(2);
+	isPrime[2] = true;
 	for (ull i = 0; i<N; ++i) {
 		if (p[i]) {
 			Primes.push_back(i + i + 3);
+			Prime.insert(i + i + 3);
+			isPrime[i + i + 3] = true;
 		}
 	}
 }
@@ -94,7 +101,7 @@ void output() {
 	/*for (ull &x : Primes)
 		cout << x << " ";
 	cout << endl;*/
-	cout<< "¸öÊı£º" << Primes.size() << endl;
+	cout<< "ä¸ªæ•°ï¼š" << Primes.size() << endl;
 }
 int main()
 {
@@ -107,28 +114,28 @@ int main()
 	//output();
 	finish = clock();
 	totaltime = (double)(finish - start) / CLOCKS_PER_SEC;
-	cout << totaltime << "Ãë£¡" << endl;
+	cout << totaltime << "ç§’ï¼" << endl;
 
 	start = clock();
 	__MakePrime(N);
 	//output();
 	finish = clock();
 	totaltime = (double)(finish - start) / CLOCKS_PER_SEC;
-	cout << totaltime << "Ãë£¡" << endl;
+	cout << totaltime << "ç§’ï¼" << endl;
 
 	start = clock();
 	___MakePrime(N);
 	//output();
 	finish = clock();
 	totaltime = (double)(finish - start) / CLOCKS_PER_SEC;
-	cout << totaltime << "Ãë£¡" << endl;
+	cout << totaltime << "ç§’ï¼" << endl;
 
 	start = clock();
 	____MakePrime(N);
 	//output();
 	finish = clock();
 	totaltime = (double)(finish - start) / CLOCKS_PER_SEC;
-	cout << totaltime << "Ãë£¡" << endl;
+	cout << totaltime << "ç§’ï¼" << endl;
 
 	system("pause");
 	return 0;
