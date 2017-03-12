@@ -1,26 +1,42 @@
 #include <iostream>
 #include <ctime>
-#include <cstdlib>
+#include <random>
 using namespace std;
-int random(int start, int end);
-int main() {
-	clock_t start, finish;
-	double totaltime;
-	start = clock();
+class RandomNum {
+private:
+	random_device rd;
+public:
+	RandomNum() {};
+	int getNum(int a, int b) {
+		if (a > b)
+			swap(a, b);
+		mt19937 gen(rd());
+		uniform_int_distribution<> dis(a, b);
+		return dis(gen);
+	}
+};
+class Timer {
+private:
+	clock_t s, f;
+public:
+	Timer() {};
+	void start() {s = clock();}
+	void finish() {f = clock();}
+	double totaltime() {return (double)(f - s) / CLOCKS_PER_SEC;}
+};
+int main()
+{
+	Timer t;
+	t.start();
 
+	RandomNum r;
+	for (int n = 0; n<100; ++n)
+		std::cout << r.getNum(10,0) << ' ';
+	std::cout << '\n';
 
-	srand(unsigned(time(0)));
-	for (int icnt = 0; icnt != 10; ++icnt)
-		cout << "No." << icnt + 1 << ": " << int(random(0, 10)) << endl;
-
-	finish = clock();
-	totaltime = (double)(finish - start) / CLOCKS_PER_SEC;
-	cout << "\n此程序的运行时间为" << totaltime << "秒！" << endl;
+	t.finish();
+	cout << "\n此程序的运行时间为" << t.totaltime() << "秒！" << endl;
 
 	system("pause");
 	return 0;
-}
-
-int random(int start, int end) {
-	return start + (int)rand() % (end - start + 1);
 }
