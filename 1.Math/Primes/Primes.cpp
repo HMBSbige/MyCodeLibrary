@@ -7,7 +7,7 @@ Primes::Primes(ull N) {
 Primes::~Primes(){
 	release();
 }
-void Primes::MakePrime(ull N)//Ä¤¸Ä¿ìËÙÏßÐÔÉ¸·¨
+void Primes::MakePrime(ull N)//è†œæ”¹å¿«é€Ÿçº¿æ€§ç­›æ³•
 {
 	release();
 	ull m = N;
@@ -61,7 +61,12 @@ ull Primes::at(ull n)
 	else
 		return 0;
 }
-
+ull Primes::Number(ull n)
+{
+	/*auto it = Prime.begin();
+	advance(it, n);*/
+	return distance(Prime.begin(), Prime.upper_bound(n));;
+}
 bool Primes::isPrimeNumer(ull num)
 {
 	set<ull>::iterator it=Prime.find(num);
@@ -69,21 +74,18 @@ bool Primes::isPrimeNumer(ull num)
 		return false;
 	return true;
 }
-
 ull Primes::find(ull num)
 {
-	for(ull i=0;i<Number();++i)
-		if (vecPrime[i] == num) {
-			return i+1;
-		}
-	return 0;
+	set<ull>::iterator it = Prime.find(num);
+	if (it == Prime.end())
+		return 0;
+	return distance(Prime.begin(), Prime.upper_bound(num));
 }
-
 vector<pair<ull, ull>> Primes::factor(ull n)
 {
 	ull temp, i, now;
 	vector<pair<ull, ull>> a;
-	temp = Number();
+	temp = Number((ull)(sqrt(n)));
 	now = n;
 	for (i = 0; now > 1 && i < temp; ++i)
 		if (now%vecPrime[i] == 0) {
