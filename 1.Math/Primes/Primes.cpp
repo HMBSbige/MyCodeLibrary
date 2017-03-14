@@ -99,3 +99,12 @@ vector<pair<ull, ull>> Primes::factor(ull n)
 		a.push_back(make_pair(now, 1));
 	return a;
 }
+ull Primes::Euler(ull n)
+{
+	if (n == 1)
+		return 0;
+	vector<pair<ull, ull> > f = factor(n);
+	for (int i = 0; i < f.size(); ++i)
+		n = n / f[i].first * (f[i].first - 1);
+	return n;
+}

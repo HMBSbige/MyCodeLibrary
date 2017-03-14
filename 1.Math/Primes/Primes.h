@@ -25,4 +25,5 @@ public:
 	bool isPrimeNumer(ull);//判断是否是素数
 	ull find(ull);//返回n是第几个素数，错误返回0
 	vector<pair<ull, ull> >factor(ull n);//将n分解质因数
+	ull Euler(ull n);//返回欧拉函数
 };
