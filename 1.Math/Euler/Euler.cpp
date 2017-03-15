@@ -2,14 +2,14 @@
 
 ull Euler::_Euler(ull n)
 {
-	ull a = n;
+	int  a = n;
 	for (int i = 2; i*i <= a; i++) {
 		if (a%i == 0) {
-			n /= i*(i - 1);
+			n = n / i*(i - 1);   
 			while (a%i == 0) a /= i;
 		}
 	}
-	if (a>1) n /= a*(a - 1);
+	if (a>1) n = n / a*(a - 1);
 	return n;
 }
 ull* Euler::MakeEuler(ull N)
