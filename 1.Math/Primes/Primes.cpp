@@ -99,15 +99,6 @@ vector<pair<ull, ull>> Primes::factor(ull n)
 		a.push_back(make_pair(now, 1));
 	return a;
 }
-ull Primes::Euler(ull n)
-{
-	if (n == 1)
-		return 1;
-	vector<pair<ull, ull> > f = factor(n);
-	for (int i = 0; i < f.size(); ++i)
-		n = n / f[i].first * (f[i].first - 1);
-	return n;
-}
 vector<ull> Primes::minfactor(ull n) {
 	vector<ull> m(n + 1, 0);
 	for (ull i = 2; i <= n; ++i)
@@ -126,19 +117,4 @@ vector<ull> Primes::minfactor(ull n) {
 		}
 	}
 	return m;
-}
-vector<ull> Primes::MakeEuler(ull N)
-{
-    vector<ull> phi(N+1);
-    vector<ull> m = minfactor(N);
-    phi[1]=1;
-    for(ull i=2;i<=N;++i){
-        phi[i]=phi[i/m[i]];
-        if((i/m[i])%m[i]==0){
-            phi[i]*=m[i];
-        }else{
-            phi[i]*=m[i]-1;
-        }
-    }
-    return phi;
 }
