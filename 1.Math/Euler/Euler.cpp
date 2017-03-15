@@ -2,7 +2,7 @@
 
 ull Euler::_Euler(ull n)
 {
-	int  a = n;
+	ull a = n;
 	for (int i = 2; i*i <= a; i++) {
 		if (a%i == 0) {
 			n = n / i*(i - 1);   
