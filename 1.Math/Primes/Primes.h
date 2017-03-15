@@ -26,4 +26,6 @@ public:
 	ull find(ull);//返回n是第几个素数，错误返回0
 	vector<pair<ull, ull> >factor(ull n);//将n分解质因数
 	ull Euler(ull n);//返回欧拉函数
+	vector<ull> minfactor(ull n);//返回2-n的最小素因数
+	vector<ull> MakeEuler(ull N);//返回1-N的欧拉函数
 };
