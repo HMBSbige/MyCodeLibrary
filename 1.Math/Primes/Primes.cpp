@@ -108,21 +108,24 @@ ull Primes::Euler(ull n)
 		n = n / f[i].first * (f[i].first - 1);
 	return n;
 }
-vector<ull> Primes::minfactor(ull n){
-    vector<ull> m(n+1,0);
-    for (ull i = 2; i <=n; ++i)
+vector<ull> Primes::minfactor(ull n) {
+	vector<ull> m(n + 1, 0);
+	for (ull i = 2; i <= n; ++i)
 	{
-	    if(isPrimeNumer(i))
-            m[i]=i;
-        else{
-            for(ull j=0;j<Number();++j)
-                if (i%vecPrime[j] == 0) {
-                    m[i]=vecPrime[j];
-                    break;
-                }
-        }
+		if (isPrimeNumer(i))
+			m[i] = i;
+		else {
+			for (ull j = 0; j < Number(); ++j) {
+				if (i%vecPrime[j] == 0) {
+					m[i] = vecPrime[j];
+					break;
+				}
+				m[i] = i;
+			}
+				
+		}
 	}
-    return m;
+	return m;
 }
 vector<ull> Primes::MakeEuler(ull N)
 {
