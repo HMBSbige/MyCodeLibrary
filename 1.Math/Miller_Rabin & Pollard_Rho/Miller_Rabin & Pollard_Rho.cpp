@@ -1,5 +1,5 @@
-class Miller_Rabin{
-using ull = unsigned long long;
+class Miller_Rabin {
+	using ull = unsigned long long;
 private:
 	const int S;
 	ull mult_mod(ull  a, ull   b, ull   c)
@@ -54,7 +54,7 @@ private:
 			return false;
 	}
 public:
-	Miller_Rabin():S(8){}
+	Miller_Rabin() :S(10) {}
 	bool isPrime(ull n)
 	{
 		if (n < 2)return false;
@@ -63,7 +63,7 @@ public:
 		ull x = n - 1;
 		ull t = 0;
 		while ((x & 1) == 0) { x >>= 1; t++; }
-		//srand((unsigned int)time(NULL));
+		srand((unsigned int)time(NULL));
 		register int i;
 		for (i = 0; i < S; i++)
 		{
@@ -75,13 +75,16 @@ public:
 	}
 };
 class Pollard_Rho {
-using ull = unsigned long long;
+	using ull = unsigned long long;
 public:
-	Pollard_Rho(){}
-	vector<ull> factor;
+	Pollard_Rho() {}
+	std::vector<ull> factor;
 	ull minfactor(ull n) {
-		vector<ull>().swap(factor);
+		std::vector<ull>().swap(factor);
 		findfac(n);
+		if (!factor.size()) {
+			return 1;
+		}
 		return factor[min_element(factor.begin(), factor.end()) - factor.begin()];
 	}
 private:
@@ -135,6 +138,8 @@ private:
 	}
 	void findfac(ull n)
 	{
+		if (n == 1)
+			return;
 		if (mr.isPrime(n))//素数
 		{
 			factor.push_back(n);
