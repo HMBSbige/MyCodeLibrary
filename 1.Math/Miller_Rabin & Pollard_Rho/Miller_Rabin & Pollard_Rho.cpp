@@ -138,8 +138,10 @@ private:
 	}
 	void findfac(ull n)
 	{
-		if (n == 1)
+		if (n == 1) {
+			factor.push_back(n);
 			return;
+		}
 		if (mr.isPrime(n))//素数
 		{
 			factor.push_back(n);
