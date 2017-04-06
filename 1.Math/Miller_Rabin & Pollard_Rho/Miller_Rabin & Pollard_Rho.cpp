@@ -1,13 +1,44 @@
+typedef int64_t ll;
+typedef uint64_t ull;
 class Miller_Rabin {
-	using ull = unsigned long long;
 private:
 	const int S;
-	ull mult_mod(ull  a, ull   b, ull   c)
+	ll  pow_mod(ll   a, ll   n, ll   mod)
+	{
+		ll ret = 1;
+		ll temp = a%mod;
+		while (n)
+		{
+			if (n & 1)
+				ret = mult_mod(ret, temp, mod);
+			temp = mult_mod(temp, temp, mod);
+			n >>= 1;
+		}
+		return ret;
+	}
+	bool check(ll a, ll n, ll x, ll t)
+	{
+		ll ret = pow_mod(a, x, n);
+		ll last = ret;
+		register ll i;
+		for (i = 1; i <= t; ++i)
+		{
+			ret = mult_mod(ret, ret, n);
+			if (ret == 1 && last != 1 && last != n - 1)
+				return true;
+			last = ret;
+		}
+		if (ret != 1)
+			return true;
+		return false;
+	}
+public:
+	ll mult_mod(ll  a, ll   b, ll   c)
 	{
 		a %= c;
 		b %= c;
-		ull ret = 0;
-		ull tmp = a;
+		ll ret = 0;
+		ll tmp = a;
 		while (b)
 		{
 			if (b & 1)
@@ -23,37 +54,6 @@ private:
 		}
 		return ret;
 	}
-	ull  pow_mod(ull   a, ull   n, ull   mod)
-	{
-		ull ret = 1;
-		ull temp = a%mod;
-		while (n)
-		{
-			if (n & 1)
-				ret = mult_mod(ret, temp, mod);
-			temp = mult_mod(temp, temp, mod);
-			n >>= 1;
-		}
-		return ret;
-	}
-	bool check(ull a, ull n, ull x, ull t)
-	{
-		ull ret = pow_mod(a, x, n);
-		ull last = ret;
-		register ull i;
-		for (i = 1; i <= t; i++)
-		{
-			ret = mult_mod(ret, ret, n);
-			if (ret == 1 && last != 1 && last != n - 1)
-				return true;
-			last = ret;
-		}
-		if (ret != 1)
-			return true;
-		else
-			return false;
-	}
-public:
 	Miller_Rabin() :S(10) {}
 	bool isPrime(ull n)
 	{
@@ -75,7 +75,6 @@ public:
 	}
 };
 class Pollard_Rho {
-	using ull = unsigned long long;
 public:
 	Pollard_Rho() {}
 	std::vector<ull> factor;
@@ -89,37 +88,22 @@ public:
 	}
 private:
 	Miller_Rabin mr;
-	ull gcd(ull a, ull b)
+	ll gcd(ll a, ll b)
 	{
 		if (a == 0)return 1;//???????
+		if (a<0) return gcd(-a, b);
+		if (b<0) return gcd(a, -b);
 		while (b)
 		{
-			ull t = a%b;
+			ll t = a%b;
 			a = b;
 			b = t;
 		}
 		return a;
 	}
-	ull mult_mod(ull  a, ull   b, ull   c)
+	ll mult_mod(ll  a, ll   b, ll   c)
 	{
-		a %= c;
-		b %= c;
-		ull ret = 0;
-		ull tmp = a;
-		while (b)
-		{
-			if (b & 1)
-			{
-				ret += tmp;
-				if (ret > c)
-					ret -= c;
-			}
-			tmp <<= 1;
-			if (tmp > c)
-				tmp -= c;
-			b >>= 1;
-		}
-		return ret;
+		return mr.mult_mod(a, b, c);
 	}
 	ull Pollard_rho(ull x, ull c)
 	{
