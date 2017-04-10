@@ -16,7 +16,15 @@ ll gcd(const ll& a, const ll& b)//辗转相除法 递归
 {
 	if (a<0) return gcd(-a, b);
 	if (b<0) return gcd(a, -b);
-	return b == 0 ? a : gcd1(b, a%b);
+	return b == 0 ? a : gcd(b, a%b);
+}
+ll gcd(ll a, ll b)
+{
+	if (a<0) return gcd(-a, b);
+	if (b<0) return gcd(a, -b);
+	if (b == 0) return a;
+	while ((a %= b) && (b %= a));
+	return a + b;
 }
 //stein算法
 ll gcdcore(ll a, ll b) {
