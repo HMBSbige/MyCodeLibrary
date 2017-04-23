@@ -43,3 +43,4 @@ MMMMMMMMMMMMMMMMMMMMMMMMMMMM%%%%%%#############****##MMMMMMMMMMMMMMMMMMMMMMMMMMM
 ```
 ![](https://raw.githubusercontent.com/HMBSbige/MyCodeLibrary/master/Other/Output%20a%20Sphere/pic/Sphere%201.png)
 # Sphere 2
+![](https://raw.githubusercontent.com/HMBSbige/MyCodeLibrary/master/Other/Output%20a%20Sphere/pic/Sphere%202.gif)
