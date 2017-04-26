@@ -1,11 +1,13 @@
+const double pi=acos(-1.0);
 class point{
 private:
     double x,y;
-    const double pi;
 public:
     point(double,double);
     void input(std::istream is);
     void input(double,double);
+    double getx(){return x;}
+    double gety(){return y;}
     point operator +(const point &b) const;
     point operator -(const point &b) const;
     bool operator ==(const point &b) const;
@@ -18,7 +20,7 @@ public:
     friend double dist(const point &a,const point &b);//两点间距离
     friend point rotate_point(const point &p,double A);// 向量op绕原点逆时针旋转A弧度
 };
-point::point(double a=0.0,double b=0.0):x(a),y(b),pi(acos(-1.0)){}
+point::point(double a=0.0,double b=0.0):x(a),y(b){}
 void point::input(std::istream is){
     is>>x>>y;
 }
