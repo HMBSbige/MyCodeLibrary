@@ -17,6 +17,8 @@ public:
 	BigNumber(size_t x);
 	string toString();
 	BigNumber big_pow(size_t n)const;
+	BigNumber BigNumber::sqrt()const;
+	BigNumber BigNumber::sqrt3()const;
 	friend BigNumber operator +(const BigNumber &a, const BigNumber &b);
 	friend BigNumber operator -(const BigNumber &a, const BigNumber &b);
 	friend BigNumber operator *(const BigNumber &a, const BigNumber &b);
@@ -322,18 +324,41 @@ ostream& operator<<(ostream& os, BigNumber&& n) {
 	os << n.toString();
 	return os;
 }
-int main()
+inline int64_t double2int64(double d)//d<1125899906842623
 {
-	BigNumber a("2958949854198489489489498489456454545");
-	BigNumber b("518181894189489498489648964894");
-	cout << a+b << endl;
-	cout << a-b << endl;
-	cout << a*b << endl;
-	cout << a / b << endl;
-	cout << a%b << endl;
-	cout << (a > b) << endl;
-	cout << (a < b) << endl;
-	cout << (a != b) << endl;
-	system("pause");
-	return 0;
+	d += 6755399441055744.0;// 1.5 * 2^52
+	auto i = reinterpret_cast<int64_t&>(d);
+	i <<= 13;
+	i >>= 13;
+	return i;
+}
+BigNumber BigNumber::sqrt()const {
+	BigNumber l = 0, r = *this, _mid;
+	BigNumber mid=0;
+	while (l<r) {
+		mid = _mid = (l + r) /2;
+		mid = mid*mid;
+		if (*this == mid)
+			return _mid;
+		if (*this<mid)
+			r = _mid - 1; 
+		else if (*this>mid)
+			l = _mid + 1;
+	}
+	return l;
+}
+BigNumber BigNumber::sqrt3()const {
+	BigNumber l = 0, r = *this, _mid;
+	BigNumber mid = 0;
+	while (l<r) {
+		mid = _mid = (l + r) /2;
+		mid = mid*mid*mid;
+		if (*this == mid)
+			return _mid;
+		if (*this<mid)
+			r = _mid - 1; 
+		else if (*this>mid)
+			l = _mid + 1;
+	}
+	return l;
 }
