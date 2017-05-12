@@ -1,8 +1,5 @@
-typedef int64_t ll;
+//https://en.wikipedia.org/wiki/Pollard%27s_rho_algorithm.
 typedef uint64_t ull;
-/*
-https://en.wikipedia.org/wiki/Pollard%27s_rho_algorithm.
-*/
 class Pollard_Rho {
 public:
 	Pollard_Rho() {}
@@ -13,40 +10,62 @@ public:
 		if (!factor.size()) {
 			return 1;
 		}
-		return factor[min_element(factor.begin(), factor.end()) - factor.begin()];
+		return *min_element(factor.begin(), factor.end());
 	}
 private:
+	static ull mult_mod(ull a, ull b, ull c) {/// return a*b%c
+		a %= c;
+		b %= c;
+		ull ret = 0;
+		auto tmp = a;
+		while (b) {
+			if (b & 1) {
+				ret += tmp;
+				if (ret > c)
+					ret -= c;
+			}
+			tmp <<= 1;
+			if (tmp > c)
+				tmp -= c;
+			b >>= 1;
+		}
+		return ret;
+	}
 	Miller_Rabin mr;
-	ll gcd(ll a, ll b)
+	RandomINT r;
+	static ull gcd(ull a, ull b)
 	{
-		if (a == 0)return 1;//???????
-		if (a<0) return gcd(-a, b);
-		if (b<0) return gcd(a, -b);
+		if (a == 0)
+			return 1;
 		while (b)
 		{
-			ll t = a%b;
+			auto t = a%b;
 			a = b;
 			b = t;
 		}
 		return a;
 	}
-	ll mult_mod(ll  a, ll   b, ll   c)
-	{
-		return mr.mult_mod(a, b, c);
-	}
 	ull Pollard_rho(ull x, ull c)
 	{
 		ull i = 1, k = 2;
-		ull x0 = rand() % x;
-		ull y = x0;
-		while (1)
-		{
-			i++;
+		auto x0 = r.GetRandomInteger<ull>(0, x - 1);//[0,x-1]
+		auto y = x0;
+		while (true) {
+			++i;
 			x0 = (mult_mod(x0, x0, x) + c) % x;
-			ull d = gcd(y - x0, x);
-			if (d != 1 && d != x) return d;
-			if (y == x0) return x;
-			if (i == k) { y = x0; k += k; }
+			ull d;
+			if (y<x0)
+				d = gcd(x0 - y, x);
+			else
+				d = gcd(y - x0, x);
+			if (d != 1 && d != x)
+				return d;
+			if (y == x0)
+				return x;
+			if (i == k) {
+				y = x0;
+				k += k;
+			}
 		}
 	}
 	void findfac(ull n)
@@ -60,9 +79,9 @@ private:
 			factor.push_back(n);
 			return;
 		}
-		ull p = n;
+		auto p = n;
 		while (p >= n)
-			p = Pollard_rho(p, rand() % (n - 1) + 1);
+			p = Pollard_rho(p, r.GetRandomInteger<ull>(1, n - 1));
 		findfac(p);
 		findfac(n / p);
 	}
