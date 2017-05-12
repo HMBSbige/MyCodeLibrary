@@ -1,51 +1,40 @@
-typedef int64_t ll;
+//https://en.wikipedia.org/wiki/Miller%E2%80%93Rabin_primality_test
 typedef uint64_t ull;
-/*
-https://en.wikipedia.org/wiki/Miller%E2%80%93Rabin_primality_test
-*/
+class RandomINT {
+private:
+	std::mt19937 gen;
+public:
+	RandomINT() :gen(unsigned(time(nullptr))) {};
+	template<class T = long long>
+	T GetRandomInteger(T a, T b) {///return random integer in [a,b]
+		if (a>b)
+			swap(a, b);
+		std::uniform_int_distribution<T> dis(a, b);
+		return dis(gen);
+	}
+};
 class Miller_Rabin {
 private:
-	const int S;
-	ll  pow_mod(ll   a, ll   n, ll   mod)
-	{
-		ll ret = 1;
-		ll temp = a%mod;
-		while (n)
-		{
-			if (n & 1)
-				ret = mult_mod(ret, temp, mod);
-			temp = mult_mod(temp, temp, mod);
-			n >>= 1;
+	const size_t S;
+	static ull pow_mod(ull base, ull exp, ull modulus) {///return base**exp%modulus
+		base %= modulus;
+		ull result = 1;
+		while (exp > 0) {
+			if (exp & 1)
+				result = mult_mod(result, base, modulus);
+			base = mult_mod(base, base, modulus);
+			exp >>= 1;
 		}
-		return ret;
+		return result;
 	}
-	bool check(ll a, ll n, ll x, ll t)
-	{
-		ll ret = pow_mod(a, x, n);
-		ll last = ret;
-		register ll i;
-		for (i = 1; i <= t; ++i)
-		{
-			ret = mult_mod(ret, ret, n);
-			if (ret == 1 && last != 1 && last != n - 1)
-				return true;
-			last = ret;
-		}
-		if (ret != 1)
-			return true;
-		return false;
-	}
-public:
-	ll mult_mod(ll  a, ll   b, ll   c)
-	{
+
+	static ull mult_mod(ull a, ull b, ull c) {/// return a*b%c
 		a %= c;
 		b %= c;
-		ll ret = 0;
-		ll tmp = a;
-		while (b)
-		{
-			if (b & 1)
-			{
+		ull ret = 0;
+		auto tmp = a;
+		while (b) {
+			if (b & 1) {
 				ret += tmp;
 				if (ret > c)
 					ret -= c;
@@ -57,20 +46,42 @@ public:
 		}
 		return ret;
 	}
+	//以a为基,n-1=x*2^t    a^(n-1)=1(mod n)    验证n是不是合数
+	//一定是合数返回true,不一定返回false
+	static bool check(ull a, ull n, ull x, ull t)
+	{
+		auto ret = pow_mod(a, x, n);
+		auto last = ret;
+		for (ull i = 1; i <= t; ++i)
+		{
+			ret = mult_mod(ret, ret, n);
+			if (ret == 1 && last != 1 && last != n - 1)
+				return true;
+			last = ret;
+		}
+		if (ret != 1)
+			return true;
+		return false;
+	}
+public:
 	Miller_Rabin() :S(10) {}
-	bool isPrime(ull n)
+	//素数返回true 可能是伪素数,但概率极小(2^(-S))
+	//合数返回false
+	bool isPrime(ull n) const
 	{
 		if (n < 2)return false;
 		if (n == 2)return true;
-		if ((n & 1) == 0)return false;
-		ull x = n - 1;
+		if ((n & 1) == 0)return false;//偶数
+		auto x = n - 1;
 		ull t = 0;
-		while ((x & 1) == 0) { x >>= 1; t++; }
-		srand((unsigned int)time(NULL));
-		register int i;
-		for (i = 0; i < S; i++)
+		while ((x & 1) == 0) {
+			x >>= 1;
+			++t;
+		}
+		RandomINT r;
+		for (size_t i = 0; i < S; ++i)
 		{
-			ull a = rand() % (n - 1) + 1;
+			auto a = r.GetRandomInteger<ull>(1, n - 1);//[1,n-1]的随机数
 			if (check(a, n, x, t))
 				return false;
 		}
