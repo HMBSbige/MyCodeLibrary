@@ -1,13 +1,10 @@
 const double pi=acos(-1.0);
 class point{
-private:
-    double x,y;
 public:
+    double x,y;
     point(double,double);
     void input(std::istream& is);
     void input(double,double);
-    double getx(){return x;}
-    double gety(){return y;}
     point operator +(const point &b) const;
     point operator -(const point &b) const;
     bool operator ==(const point &b) const;
