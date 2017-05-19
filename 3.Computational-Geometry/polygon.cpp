@@ -38,13 +38,13 @@ int polygon::isPointIn(point t){
             --num;
     }
     if(PointOnSegment(t,a[n-1],a[0]))
-            return 2;
-        k=cmp(det(a[0]-a[n-1],t-a[n-1]));
-        d1=cmp(a[n-1].y-t.y);
-        d2=cmp(a[0].y-t.y);
-        if(k>0 && d1<=0 && d2>0)
-            ++num;
-        if(k<0 && d2<=0 && d1>0)
-            --num;
+				return 2;
+    k=cmp(det(a[0]-a[n-1],t-a[n-1]));
+    d1=cmp(a[n-1].y-t.y);
+    d2=cmp(a[0].y-t.y);
+    if(k>0 && d1<=0 && d2>0)
+        ++num;
+    if(k<0 && d2<=0 && d1>0)
+        --num;
     return num!=0;
 }
