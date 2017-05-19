@@ -1,6 +1,5 @@
 const double pi=acos(-1.0);
 class line{
-private:
 public:
     point a,b;
     line(){}
@@ -40,7 +39,7 @@ bool isParallel(line a,line b)//a,b是否平行(不包括重合)
         return true;
     return false;
 }
-bool isIntersecting(line a,line b,point &res)//a,b是否相交,保存交点在res
+bool isIntersecting(line a,line b,point &res)//直线a,b是否相交,保存交点在res
 {
     if(isParallel(a,b) || isCoincident(a,b))
         return false;
@@ -48,6 +47,10 @@ bool isIntersecting(line a,line b,point &res)//a,b是否相交,保存交点在re
     double s2=det(a.b-b.a,b.b-b.a);
     res=(s1*a.b-s2*a.a)/(s1-s2);
     return true;
+}
+bool cross(line a，line b,point &res)//线段a,b是否相交
+{
+    return isIntersecting(a,b,res) && PointOnSegment(res,a.a,a.b) && PointOnSegment(res,b.a,b.b);
 }
 line move_d(line a,const double &len)//将直线a沿法向量方向平移len得到的直线
 {
