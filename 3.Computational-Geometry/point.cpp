@@ -4,7 +4,7 @@ private:
     double x,y;
 public:
     point(double,double);
-    void input(std::istream is);
+    void input(std::istream& is);
     void input(double,double);
     double getx(){return x;}
     double gety(){return y;}
@@ -21,7 +21,7 @@ public:
     friend point rotate_point(const point &p,double A);// 向量op绕原点逆时针旋转A弧度
 };
 point::point(double a=0.0,double b=0.0):x(a),y(b){}
-void point::input(std::istream is){
+void point::input(std::istream& is){
     is>>x>>y;
 }
 void point::input(double a,double b){
