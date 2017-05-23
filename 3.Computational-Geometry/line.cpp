@@ -3,7 +3,7 @@ const double pi = acos(-1.0);
 class line {
 public:
 	point a, b;
-	line() {}
+	line(): a(0,0),b(0,0){}
 	line(point _a, point _b) :a(_a), b(_b) {}
 };
 double dis_point_segment(const point p, const point s, const point t)//返回点p到线段st的距离
