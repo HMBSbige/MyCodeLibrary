@@ -60,3 +60,7 @@ line move_d(line a, const double &len)//将直线a沿法向量方向平移len得
 	d = rotate_point(d, pi / 2);
 	return line(a.a + d*len, a.b + d*len);
 }
+bool if3PointAreCollinear(const point &a, const point &b, const point &c)//三点共线
+{
+	return isCoincident(line(a, b), line(b, c));
+}
