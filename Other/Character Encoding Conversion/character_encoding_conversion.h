@@ -1,13 +1,13 @@
 #pragma once
-#include <iostream>  
-#include <windows.h>  
-#include <string>  
-using namespace std;  
-class W2CHAR  
+#include <iostream>
+#include <windows.h>
+#include <string>
+using namespace std;
+class CharacterEncodingConversion  
 {  
 public:  
-    W2CHAR();  
-    virtual~ W2CHAR();  
+    CharacterEncodingConversion();  
+    virtual~ CharacterEncodingConversion();  
     char* WcharToChar(const wchar_t* wp);  
     char* StringToChar(const string& s);  
     char* WstringToChar(const wstring& ws);  
