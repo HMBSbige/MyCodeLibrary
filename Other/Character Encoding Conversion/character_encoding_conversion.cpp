@@ -1,4 +1,5 @@
 #include "character_encoding_conversion.h"
+
 CharacterEncodingConversion::CharacterEncodingConversion()
 :m_char(nullptr)
 ,m_wchar(nullptr)
@@ -66,4 +67,26 @@ wstring CharacterEncodingConversion::StringToWstring(const std::string &s)
 	wchar_t* wp=StringToWchar(s);
 	ws.append(wp);
 	return ws;
+}
+string CharacterEncodingConversion::WstringToU8string(const wstring& ws)
+{
+	/*Release();
+	auto iTextLen = WideCharToMultiByte(CP_UTF8, 0, ws.c_str(), -1, nullptr, 0, nullptr, nullptr);
+	m_char = new char[iTextLen + 1];
+	WideCharToMultiByte(CP_UTF8, 0, ws.c_str(), -1, m_char, iTextLen, nullptr, nullptr);
+	m_char[iTextLen] = '\0';
+	string strText = m_char;
+	return strText;*/
+	return conver.to_bytes(ws);
+}
+wstring CharacterEncodingConversion::U8stringToWstring(const string& u8s)
+{
+	/*Release();
+	auto unicodeLen = MultiByteToWideChar(CP_UTF8,0, u8s.c_str(),-1,nullptr,0);
+	m_wchar = new wchar_t[unicodeLen + 1];
+	MultiByteToWideChar(CP_UTF8,0, u8s.c_str(),-1,static_cast<LPWSTR>(m_wchar),unicodeLen);
+	m_wchar[unicodeLen] = '\0';
+	wstring rt = m_wchar;
+	return rt;*/
+	return conver.from_bytes(u8s);
 }
