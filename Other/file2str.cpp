@@ -1,6 +1,6 @@
 string textfile2str(const string& PATH)
 {
-	ifstream file(PATH,std::ios::trunc);
+	ifstream file(PATH);
 	ostringstream oss;
 	oss << file.rdbuf();
 	file.close();
