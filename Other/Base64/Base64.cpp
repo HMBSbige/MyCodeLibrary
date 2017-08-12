@@ -1,9 +1,9 @@
 #include "Base64.h"
 
-static const char *g_pCodes =
-"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+static const char base64EncodeChars[] =
+"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
-static const unsigned char g_pMap[256] =
+static const char base64DecodeChars[] =
 {
 	255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
 	255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
@@ -36,32 +36,34 @@ Base64::Base64()
 Base64::~Base64()
 {
 }
-string Base64::Encode(string strIn)
+string Base64::Encode(string u8str)
 {
-	size_t len = strIn.length();
-	unsigned long i;
+	size_t len = u8str.length();
 	string strOut = "";
-	unsigned long leven = 3 * (len / 3);
-	for (i = 0; i < leven; i += 3)
-	{
-		strOut += g_pCodes[strIn[0] >> 2];
-		strOut += g_pCodes[((strIn[0] & 3) << 4) + (strIn[1] >> 4)];
-		strOut += g_pCodes[((strIn[1] & 0xf) << 2) + (strIn[2] >> 6)];
-		strOut += g_pCodes[strIn[2] & 0x3f];
-		strIn.erase(0, 3);
-	}
-
-	if (i < len)
-	{
-		unsigned char a = strIn[0];
-		unsigned char b = ((i + 1) < len) ? strIn[1] : 0;
-		unsigned char c = 0;
-
-		strOut += g_pCodes[a >> 2];
-		strOut += g_pCodes[((a & 3) << 4) + (b >> 4)];
-		strOut += ((i + 1) < len) ? g_pCodes[((b & 0xf) << 2) + (c >> 6)] : '=';
-		strOut += '=';
-	}
+	for(size_t i = 0;i < len;) {
+		wchar_t c1 = u8str[i++] & 0xff;
+		if(i == len)
+		{
+			strOut += base64EncodeChars[c1 >> 2];
+			strOut += base64EncodeChars[(c1 & 0x3) << 4];
+			strOut += "==";
+			break;
+		}
+		wchar_t c2 = u8str[i++];
+		if(i == len)
+		{
+			strOut += base64EncodeChars[c1 >> 2];
+			strOut += base64EncodeChars[((c1 & 0x3)<< 4) | ((c2 & 0xF0) >> 4)];
+			strOut += base64EncodeChars[(c2 & 0xF) << 2];
+			strOut += "=";
+			break;
+		}
+		wchar_t c3 = u8str[i++];
+		strOut += base64EncodeChars[c1 >> 2];
+		strOut += base64EncodeChars[((c1 & 0x3)<< 4) | ((c2 & 0xF0) >> 4)];
+		strOut += base64EncodeChars[((c2 & 0xF) << 2) | ((c3 & 0xC0) >>6)];
+		strOut += base64EncodeChars[c3 & 0x3F];
+    }
 	return strOut;
 }
 
@@ -69,12 +71,13 @@ string Base64::Decode(const string& strIn)
 {
 	unsigned long t, y;
 	unsigned long g = 3;
-	string strOut = "";
+	string u8str = "";
 
 	for (unsigned long x = y = t = 0; x < strIn.length(); ++x)
 	{
-		unsigned char c = g_pMap[strIn[x]];
-		if (c == 255) continue;
+		unsigned char c = base64DecodeChars[strIn[x]];
+		if (c == 255) 
+			continue;
 		if (c == 254)
 		{
 			c = 0; 
@@ -85,13 +88,13 @@ string Base64::Decode(const string& strIn)
 
 		if (++y == 4)
 		{
-			strOut += static_cast<unsigned char>((t >> 16) & 255);
+			u8str += static_cast<unsigned char>((t >> 16) & 255);
 			if (g > 1) 
-				strOut += static_cast<unsigned char>((t >> 8) & 255);
+				u8str += static_cast<unsigned char>((t >> 8) & 255);
 			if (g > 2) 
-				strOut += static_cast<unsigned char>(t & 255);
+				u8str += static_cast<unsigned char>(t & 255);
 			y = t = 0;
 		}
 	}
-	return strOut;
+	return u8str;
 }
