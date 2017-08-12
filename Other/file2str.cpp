@@ -1,14 +1,14 @@
-string textfile2str(string PATH)
+string textfile2str(const string& PATH)
 {
-	ifstream file(PATH);
+	ifstream file(PATH,std::ios::trunc);
 	ostringstream oss;
 	oss << file.rdbuf();
 	file.close();
 	return oss.str();
 }
-void str2file(string str,string PATH)
+void str2file(const string& str,const string& PATH)
 {
-	ofstream file(PATH);
+	ofstream file(PATH, std::ios::trunc);
 	file << str;
 	file.close();
 }
