@@ -1,8 +1,8 @@
 #include "character_encoding_conversion.h"
 
 CharacterEncodingConversion::CharacterEncodingConversion()
-:m_char(nullptr)
-,m_wchar(nullptr)
+:cv1(new codecvt_byname<wchar_t, char, mbstate_t>(GBK_LOCALE_NAME))
+,m_char(nullptr), m_wchar(nullptr)
 {}
 CharacterEncodingConversion::~CharacterEncodingConversion(){Release();}
 char* CharacterEncodingConversion::WcharToChar(const wchar_t* wp)
@@ -89,4 +89,14 @@ wstring CharacterEncodingConversion::U8stringToWstring(const string& u8s)
 	wstring rt = m_wchar;
 	return rt;*/
 	return conver.from_bytes(u8s);
+}
+
+wstring CharacterEncodingConversion::GBKstringToWstring(const string& GBK)
+{
+	return cv1.from_bytes(GBK);
+}
+
+string CharacterEncodingConversion::WstringToGBKstring(const wstring& ws)
+{
+	return cv1.to_bytes(ws);
 }

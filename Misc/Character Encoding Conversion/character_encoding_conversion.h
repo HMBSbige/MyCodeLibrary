@@ -1,5 +1,4 @@
 #pragma once
-#include <Windows.h>
 #include <codecvt>
 using namespace std;
 class CharacterEncodingConversion
@@ -17,9 +16,14 @@ public:
 	string WstringToString(const wstring& ws);
 	string WstringToU8string(const wstring& ws);
 	wstring U8stringToWstring(const string& u8s);
+	wstring GBKstringToWstring(const string& GBK);
+	string WstringToGBKstring(const wstring& ws);
 	void Release();
 private:
-	std::wstring_convert<codecvt_utf8<wchar_t>, wchar_t> conver;
+	const string GBK_LOCALE_NAME = ".936";//GBK在windows下的locale name
+	wstring_convert<codecvt_utf8<wchar_t>, wchar_t> conver;
+	wstring_convert<codecvt_byname<wchar_t, char, mbstate_t>> cv1;
+
 	char* m_char;
 	wchar_t* m_wchar;
 };
